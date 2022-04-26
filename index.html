@@ -2,9 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Data Protector</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
 </head>
-<body>
 
+<body>
+<div class="container">
+    <div class="inputs-container">
+        <input id="input_file" type="file" accept="*" />
+        <input id="input_password" type="password">
+    </div>
+    <div class="buttons-container">
+        <button>Encrypt</button>
+        <button>Decrypt</button>
+    </div>
+    <div class="output-container">
+        <a id="output_file" href="" download>Output</a>
+    </div>
+</div>
 </body>
 </html>

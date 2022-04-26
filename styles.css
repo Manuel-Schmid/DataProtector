@@ -1,0 +1,21 @@
+.container {
+    background-color: aquamarine;
+    width: 80%;
+    height: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.inputs-container {
+    background-color: red;
+}
+
+.buttons-container {
+    background-color: yellow;
+}
+
+.output-container {
+    background-color: blue;
+}
