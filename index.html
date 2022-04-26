@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Protector</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js"></script>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="assets/script.js"></script>
 </head>
 
 <body>
@@ -14,12 +14,17 @@
         <input id="input_password" type="password">
     </div>
     <div class="buttons-container">
-        <button>Encrypt</button>
-        <button>Decrypt</button>
+        <button class="crypt-button" onclick="encrypt()">Encrypt</button>
+        <button class="crypt-button" onclick="decrypt()">Decrypt</button>
     </div>
     <div class="output-container">
         <a id="output_file" href="" download>Output</a>
     </div>
 </div>
 </body>
+
+    <script src="assets/aes.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="assets/script.js"></script>
+
 </html>
