@@ -1,25 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #111;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar {
+    background-color: #fae596;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+}
+
+.nav-item {
+    color: black;
+    background-color: inherit;
+    line-height: 7vh;
+    text-decoration: none;
+    text-align: center;
+    width: 9vw;
+}
+
+.nav-item:hover {
+    background-color: #fcdc83;
+    text-decoration: underline;
+    /*transition: 200ms;*/
+}
+
 .container {
-    background-color: aquamarine;
+    background: #111;
     width: 80%;
-    height: 80%;
+    height: 93vh;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.vertical-center {
+    margin: 0;
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.flex-container-center {
+    display: flex;
+    justify-content: center;
 }
 
 .inputs-container {
-    background-color: red;
+    width: 33.33%;
 }
 
-.buttons-container {
-    background-color: yellow;
+.inputs {
+    background-color: black;
+    width: 14%;
 }
 
-.crypt-button {
+.inputs input[type="file"] {
+    display: none;
+}
 
+.custom-file-input {
+    width: 100%;
+}
+
+.password-container {
+    height: 47px;
+    width: 100%;
+}
+
+.password-container input {
+    width: 70%;
+    height: 100%;
+    padding: 12px;
+    box-sizing: border-box;
+    border: 1px solid white;
+}
+
+.generate-password-btn {
+    float: right;
+    width: 30%;
+    font-size: 18px !important;
+}
+
+.button-container {
+    width: 33.33%;
 }
 
 .output-container {
-    background-color: blue;
+    width: 33.33%;
+}
+
+.btn {
+    background-color: transparent;
+    text-decoration: none;
+    text-align: center;
+    border-style: outset;
+    display: inline-block;
+    height: 47px;
+    cursor: pointer;
+    padding: 11px 16px;
+    border-width: 1px;
+    border-radius: 0;
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    font-size: 14px;
+    font-weight: 400;
+    transition: color .15s ease-in-out , background-color .15s ease-in-out , border-color .15s ease-in-out , box-shadow .15s ease-in-out , -webkit-box-shadow .15s ease-in-out;
+}
+
+.btn:hover {
+    color: #fff;
+}
+
+.btn-green {
+    border-color: #94aa2a;
+    color: #94aa2a;
+}
+
+.btn-green:hover {
+    background: #94aa2a;
+    border-color: #94aa2a;
+}
+
+.btn-red {
+    border-color: #f0134d;
+    color: #f0134d;
+}
+
+.btn-red:hover {
+    border-color: #f0134d;
+    background: #f0134d;
+}
+
+.btn-yellow {
+    border-color: #f1bc31;
+    color: #f1bc31;
+}
+
+.btn-yellow:hover {
+    border-color: #f1bc31;
+    background: #f1bc31;
+}
+
+.btn-lightblue {
+    border-color: #64c4ed;
+    color: #64c4ed;
+}
+
+.btn-lightblue:hover {
+    border-color: #64c4ed;
+    background: #64c4ed;
+}
+
+.btn-white {
+    border-color: #f8f9fa;
+}
+
+.btn-white:hover {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
 }

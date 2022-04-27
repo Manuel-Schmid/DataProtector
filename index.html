@@ -8,22 +8,34 @@
 </head>
 
 <body>
+<nav class="navbar">
+    <a class="nav-item" href="">Encryption</a>
+    <a class="nav-item" href="">Decryption</a>
+</nav>
+
 <div class="container">
     <div class="inputs-container">
-        <input id="input_file" type="file" accept="*" />
-        <input id="input_password" type="password">
+        <div class="inputs vertical-center">
+            <label for="input_file" class="btn btn-yellow custom-file-input">
+                File to encrypt
+            </label>
+            <input id="input_file" type="file" accept="*" />
+            <div class="password-container">
+                <input id="input_password" type="password" placeholder="Your password...">
+                <button class="generate-password-btn btn btn-white">🔑</button>
+            </div>
+        </div>
     </div>
-    <div class="buttons-container">
-        <button class="crypt-button" onclick="encrypt()">Encrypt</button>
-        <button class="crypt-button" onclick="decrypt()">Decrypt</button>
+    <div class="button-container flex-container-center ">
+        <button class="btn btn-green vertical-center " onclick="encrypt()">Encrypt</button>
     </div>
-    <div class="output-container">
-        <a id="output_file" href="" download>Output</a>
+    <div class="output-container flex-container-center ">
+        <a class="btn btn-red vertical-center " id="output_file" href="" download>Output</a>
     </div>
 </div>
 </body>
 
-    <script src="assets/aes.js"></script>
+<!--    <script src="assets/aes.js"></script>-->
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="assets/script.js"></script>
 
