@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Data Protector</title>
     <link rel="stylesheet" href="assets/styles.css">
-    <script src="assets/script.js"></script>
 </head>
 
 <body>
@@ -19,24 +18,23 @@
             <label for="input_file" class="btn btn-yellow custom-file-input">
                 File to encrypt
             </label>
-            <input id="input_file" type="file" accept="*" />
+            <input id="input_file" type="file" accept="*"/>
             <div class="password-container">
-                <input id="input_password" type="password" placeholder="Your password...">
-                <button class="generate-password-btn btn btn-white">🔑</button>
+                <input id="input_password" class="in-pw-container to-disable" type="password" placeholder="Your password..." disabled>
+                <button class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
             </div>
         </div>
     </div>
     <div class="button-container flex-container-center ">
-        <button class="btn btn-green vertical-center " onclick="encrypt()">Encrypt</button>
-    </div>
-    <div class="output-container flex-container-center ">
-        <a class="btn btn-red vertical-center " id="output_file" href="" download>Output</a>
+        <button id="crypt-btn" class="btn btn-green vertical-center to-disable" onclick="encrypt()" disabled>Encrypt</button>
+        <button id="output-btn" class="btn btn-red vertical-center hidden">
+            <a id="output_file" href="" download>Download</a>
+        </button>
     </div>
 </div>
 </body>
-
-<!--    <script src="assets/aes.js"></script>-->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="assets/aes.js"></script>
+<!--    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>-->
     <script src="assets/script.js"></script>
 
 </html>
