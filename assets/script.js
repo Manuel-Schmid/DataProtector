@@ -1,4 +1,5 @@
 let activeTab = 'encrypt';
+let maxFileSize = 1 * 1024*1024; // 1 MB
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('input_file').addEventListener('change', file_upload, false);
@@ -7,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     disableAll()
 });
 
-let inputFile = null;
+let inputFiles = null;
 
 function disableDownload() {
     document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable'
@@ -25,20 +26,47 @@ function disableAll() {
 
 function file_upload(e) {
     document.getElementById('output_file').href = ''
-    inputFile = null
-
+    inputFiles = null
     disableAll()
-    if(e.target.files.length !== 1){
-        if (activeTab === 'encrypt') alert('Please select a file to encrypt!');
-        else if (activeTab === 'decrypt') alert('Please select a file to decrypt!');
-    } else {
-        let file = e.target.files[0];
 
-        if(file.size > 1024*1024){
-            alert('File sizes larger than 1mb might crash your browser. \n Please select a smaller file.');
+    if (activeTab === 'encrypt') {
+        if(e.target.files.length < 1){
+            alert('Please select at least one file to encrypt!');
         } else {
+            let files = e.target.files
+
+            let totalSize = 0
+            for (const file of files) {
+                totalSize += file.size
+                if(file.size > maxFileSize){
+                    alert('Large file sizes might crash your browser. \n Please select smaller files.');
+                    return
+                }
+            }
+            if(totalSize > maxFileSize){
+                alert('Large file sizes might crash your browser. \n Please select smaller files.');
+                return
+            }
+
             enablePasswordInputs()
-            inputFile = file;
+            inputFiles = files;
+            document.getElementById('input-file-label').innerText = 'File/s to encrypt ✅'
+        }
+    } else if (activeTab === 'decrypt') {
+        if(e.target.files.length !== 1){
+            alert('Please select a file to decrypt!');
+        } else if (e.target.files[0].name.indexOf('.encrypted') === -1) {
+            alert('Please select an encrypted file.');
+        } else {
+            let file = e.target.files[0];
+
+            if(file.size > maxFileSize){
+                alert('Large file sizes might crash your browser. \n Please select a smaller file.');
+            } else {
+                enablePasswordInputs()
+                inputFiles = [file];
+                document.getElementById('input-file-label').innerText = 'File to decrypt ✅'
+            }
         }
     }
 }
@@ -60,24 +88,52 @@ function passwordInputChange() {
 function crypt() {
     let password = document.getElementById('input_password').value;
 
-    if (inputFile == null) {
+    if (inputFiles == null) {
         if (activeTab === 'encrypt') alert('Please select a file to encrypt!');
         else if (activeTab === 'decrypt') alert('Please select a file to decrypt!');
     } else if (isEmpty(password)) {
         // password validation
         alert('Please enter a valid password.')
     } else {
-        let reader = new FileReader();
 
         if (activeTab === 'encrypt') {
-            reader.onload = function (e) {
-                let encrypted = getEncrypted(e.target.result, password) // get encryption of compressed file
-                document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
-                document.getElementById('output_file').setAttribute('download', inputFile.name + '.encrypted');
-            };
-            reader.readAsDataURL(inputFile);
+            if (inputFiles.length > 1) { // multiple files
+                let zip = new JSZip()
+
+                for(let file of inputFiles){
+                    zip.file(file.name, file)
+                }
+
+                zip.generateAsync({type:'blob'}).then((blobData)=>{
+                    // create zip blob file
+                    let zipBlob = new Blob([blobData])
+
+                    let reader = new FileReader();
+                    reader.readAsDataURL(zipBlob);
+                    reader.onloadend = function() {
+                        let base64data = reader.result;
+                        let encrypted = getEncrypted(base64data, password) // get encryption of compressed file
+
+                        document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
+                        document.getElementById('output_file').setAttribute('download', 'compressed.zip' + '.encrypted');
+                    }
+                })
+            } else { // just one file
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    let encrypted = getEncrypted(e.target.result, password) // get encryption of compressed file
+                    document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
+                    document.getElementById('output_file').setAttribute('download', inputFiles[0].name + '.encrypted');
+                };
+                reader.readAsDataURL(inputFiles[0]);
+            }
             showDownloadButton()
-        } else if (activeTab === 'decrypt') {
+        }
+
+
+        else if (activeTab === 'decrypt') {
+            let reader = new FileReader();
+
             reader.onload = function (e) {
                 let decrypted = getDecrypted(e.target.result, password) // get decryption of decompressed file
                 if(!/^data:/.test(decrypted)){
@@ -85,10 +141,10 @@ function crypt() {
                     return false;
                 }
                 document.getElementById('output_file').setAttribute('href', decrypted)
-                document.getElementById('output_file').setAttribute('download', inputFile.name.replace('.encrypted',''))
+                document.getElementById('output_file').setAttribute('download', inputFiles[0].name.replace('.encrypted',''))
                 showDownloadButton()
             };
-            reader.readAsText(inputFile);
+            reader.readAsText(inputFiles[0]);
         }
     }
 }
@@ -125,11 +181,13 @@ function showDownloadButton() {
 }
 
 function switchTab(tab) {
+    disableAll()
     document.getElementById('input_password').value = ''
     toggleNavItemDisabled()
     if (tab === 'encrypt') {
-        document.getElementById('input-file-label').innerText = 'File to encrypt'
+        document.getElementById('input-file-label').innerText = 'File/s to encrypt'
         document.getElementById('input_file').accept = '*'
+        document.getElementById('input_file').multiple = true;
         document.getElementById('input_password').style.width = '70%';
         document.getElementById('generate-password').style.width = '30%';
         document.getElementById('generate-password').style.display = 'inherit';
@@ -137,6 +195,7 @@ function switchTab(tab) {
     } else if (tab === 'decrypt') {
         document.getElementById('input-file-label').innerText = 'File to decrypt'
         document.getElementById('input_file').accept = '.encrypted'
+        document.getElementById('input_file').multiple = false;
         document.getElementById('input_password').style.width = '100%';
         document.getElementById('generate-password').style.display = 'none';
         document.getElementById('crypt-btn').innerHTML = 'Decrypt'
@@ -189,7 +248,40 @@ function handleDrop(e) {
     let dt = e.dataTransfer
     let files = dt.files
 
-    inputFile = ([...files])[0];
+    if (activeTab === 'encrypt') {
+        if (files.length < 1) {
+            alert('Please select at least one file to encrypt!');
+            return
+        } else {
+            let totalSize = 0
+            for (const file of files) {
+                totalSize += file.size
+                if(file.size > maxFileSize){
+                    alert('Large file sizes might crash your browser. \n Please select smaller files.');
+                    return
+                }
+            }
+            if(totalSize > maxFileSize){
+                alert('Large file sizes might crash your browser. \n Please select smaller files.');
+                return
+            }
+            document.getElementById('input-file-label').innerText = 'File/s to encrypt ✅'
+        }
+    } else if (activeTab === 'decrypt') {
+        if (files.length !== 1) {
+            alert('Please select one file to decrypt!');
+            return
+        } else if (files[0].size > maxFileSize) {
+            alert('Large file sizes might crash your browser. \n Please select a smaller file.');
+            return
+        } else if (files[0].name.indexOf('.encrypted') === -1) {
+            alert('Please select an encrypted file');
+        } else {
+            document.getElementById('input-file-label').innerText = 'File to decrypt ✅'
+        }
+    }
+
+    inputFiles = [...files]
     enablePasswordInputs()
 }
 
