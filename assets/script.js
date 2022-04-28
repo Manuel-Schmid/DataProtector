@@ -1,3 +1,5 @@
+let activeTab = 'encrypt';
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('input_file').addEventListener('change', file_upload, false);
     document.getElementById('output-btn').addEventListener('click', disableAll, false);
@@ -42,10 +44,11 @@ function passwordInputChange() {
     document.getElementById('crypt-btn').disabled = !!isEmpty(document.getElementById('input_password').value);
 }
 
-function encrypt() {
+function crypt() {
     let password = document.getElementById('input_password').value;
     if (inputFile == null) {
-        alert('Please select a file to encrypt!');
+        if (activeTab === 'encrypt') alert('Please select a file to encrypt!');
+        else if (activeTab === 'decrypt') alert('Please select a file to decrypt!');
     } else if (isEmpty(password)) {
         // password validation
         alert('Please enter a valid password.')
@@ -62,6 +65,30 @@ function encrypt() {
 
         document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable hidden'
         document.getElementById('output-btn').className = 'btn btn-red vertical-center'
+    }
+}
+
+function switchTab(tab) {
+    toggleNavItemDisabled()
+    if (tab === 'encrypt') {
+        document.getElementById('input-file-label').innerText = 'File to encrypt'
+        document.getElementById('input_password').style.width = '70%';
+        document.getElementById('generate-password').style.width = '30%';
+        document.getElementById('crypt-btn').innerHTML = 'Encrypt'
+        // document.getElementById('generate-password').style.display = 'none';
+    } else if (tab === 'decrypt') {
+        document.getElementById('input-file-label').innerText = 'File to decrypt'
+        document.getElementById('input_password').style.width = '100%';
+        document.getElementById('generate-password').style.display = 'none';
+        document.getElementById('crypt-btn').innerHTML = 'Decrypt'
+    }
+    activeTab = tab
+}
+
+function toggleNavItemDisabled() {
+    for (let el of document.getElementsByClassName('nav-item')) {
+        el.disabled = !el.disabled;
+        el.classList.toggle('active-tab')
     }
 }
 

@@ -25,12 +25,19 @@ body {
     text-decoration: none;
     text-align: center;
     width: 9vw;
+    border: none;
+    transition: 200ms;
 }
 
-.nav-item:hover {
+.nav-item:hover:not([disabled]) {
     background-color: #fcdc83;
     text-decoration: underline;
-    /*transition: 200ms;*/
+}
+
+.active-tab {
+    text-decoration: underline;
+    background-color: #ffd866;
+    /*font-weight: bold;*/
 }
 
 .container {

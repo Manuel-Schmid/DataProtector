@@ -8,25 +8,25 @@
 
 <body>
 <nav class="navbar">
-    <a class="nav-item" href="">Encryption</a>
-    <a class="nav-item" href="">Decryption</a>
+    <button class="nav-item active-tab" onclick="switchTab('encrypt')" disabled>Encryption</button>
+    <button class="nav-item" onclick="switchTab('decrypt')">Decryption</button>
 </nav>
 
 <div class="container">
     <div class="inputs-container">
         <div class="inputs vertical-center">
-            <label for="input_file" class="btn btn-yellow custom-file-input">
+            <label id="input-file-label" for="input_file" class="btn btn-yellow custom-file-input">
                 File to encrypt
             </label>
             <input id="input_file" type="file" accept="*"/>
             <div class="password-container">
                 <input id="input_password" class="in-pw-container to-disable" type="password" placeholder="Your password..." disabled>
-                <button class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
+                <button id="generate-password" class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
             </div>
         </div>
     </div>
     <div class="button-container flex-container-center ">
-        <button id="crypt-btn" class="btn btn-green vertical-center to-disable" onclick="encrypt()" disabled>Encrypt</button>
+        <button id="crypt-btn" class="btn btn-green vertical-center to-disable" onclick="crypt()" disabled>Encrypt</button>
         <button id="output-btn" class="btn btn-red vertical-center hidden">
             <a id="output_file" href="" download>Download</a>
         </button>
@@ -35,5 +35,4 @@
 </body>
     <script src="assets/aes.js"></script>
     <script src="assets/script.js"></script>
-
 </html>
