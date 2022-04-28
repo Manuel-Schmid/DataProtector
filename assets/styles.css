@@ -197,8 +197,9 @@ body {
     background: #f1bc31;
 }
 
-.highlighted {
-    border-color: #6731f1;
+.highlight {
+    border-color: #6731f1 !important;
+    color: #6731f1 !important;
 }
 
 .btn-lightblue {

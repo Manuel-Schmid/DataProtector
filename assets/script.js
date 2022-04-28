@@ -37,11 +37,15 @@ function file_upload(e) {
         if(file.size > 1024*1024){
             alert('File sizes larger than 1mb might crash your browser. \n Please select a smaller file.');
         } else {
-            for (let el of document.getElementsByClassName('in-pw-container')) {
-                el.disabled = false;
-            }
+            enablePasswordInputs()
             inputFile = file;
         }
+    }
+}
+
+function enablePasswordInputs() {
+    for (let el of document.getElementsByClassName('in-pw-container')) {
+        el.disabled = false;
     }
 }
 
@@ -162,5 +166,40 @@ function downloadFile() {
     disableAll()
 }
 
+// drag & drop zone
 
+let dropArea = document.getElementById('drop-area');
+let input_field = document.getElementById('input-file-label');
+
+['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, preventDefaults, false)
+})
+
+function preventDefaults (e) {
+    e.preventDefault()
+    e.stopPropagation()
+}
+
+;['dragenter', 'dragover'].forEach(eventName => {
+    dropArea.addEventListener(eventName, highlight, false)
+})
+
+;['dragleave', 'drop'].forEach(eventName => {
+    dropArea.addEventListener(eventName, unhighlight, false)
+})
+function highlight(e) {
+    input_field.classList.add('highlight')
+}
+function unhighlight(e) {
+    input_field.classList.remove('highlight')
+}
+
+dropArea.addEventListener('drop', handleDrop, false)
+function handleDrop(e) {
+    let dt = e.dataTransfer
+    let files = dt.files
+
+    inputFile = ([...files])[0];
+    enablePasswordInputs()
+}
 
