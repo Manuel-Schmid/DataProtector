@@ -71,7 +71,7 @@ function crypt() {
 
         if (activeTab === 'encrypt') {
             reader.onload = function (e) {
-                let encrypted = getEncrypted(e.target.result, password)
+                let encrypted = getEncrypted(e.target.result, password) // get encryption of compressed file
                 document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
                 document.getElementById('output_file').setAttribute('download', inputFile.name + '.encrypted');
             };
@@ -79,7 +79,7 @@ function crypt() {
             showDownloadButton()
         } else if (activeTab === 'decrypt') {
             reader.onload = function (e) {
-                let decrypted = getDecrypted(e.target.result, password)
+                let decrypted = getDecrypted(e.target.result, password) // get decryption of decompressed file
                 if(!/^data:/.test(decrypted)){
                     alert("Invalid password or file! Please try again.");
                     return false;
@@ -93,39 +93,29 @@ function crypt() {
     }
 }
 
-function getDecrypted(fileReaderResult, password) {
+function getDecrypted(compressedB64string, password) {
     switch (document.getElementById('algorithms').value) {
         case 'AES':
-            return CryptoJS.AES.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.AES.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
         case 'TripleDES':
-            return CryptoJS.TripleDES.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.TripleDES.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
         case 'Rabbit':
-            return CryptoJS.Rabbit.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.Rabbit.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
         default:
             console.log('An error occurred.')
     }
 }
 
-function getEncrypted(fileReaderResult, password) {
+function getEncrypted(compressedB64string, password) {
     switch (document.getElementById('algorithms').value) {
         case 'AES':
-            return CryptoJS.AES.encrypt(fileReaderResult, password);
+            return CryptoJS.AES.encrypt(compressedB64string, password);
         case 'TripleDES':
-            return CryptoJS.TripleDES.encrypt(fileReaderResult, password);
+            return CryptoJS.TripleDES.encrypt(compressedB64string, password);
         case 'Rabbit':
-            return CryptoJS.Rabbit.encrypt(fileReaderResult, password);
+            return CryptoJS.Rabbit.encrypt(compressedB64string, password);
         default:
             console.log('An error occurred.')
-    }
-}
-
-function dropHandler(e) {
-    e.preventDefault() // prevents opening file
-    if (e.dataTransfer.length !== 1 || e.dataTransfer.items[0].kind !== 'file') {
-        if (activeTab === 'encrypt') alert('Please select a valid file to encrypt!');
-        else if (activeTab === 'decrypt') alert('Please select a valid file to decrypt!');
-    } else {
-        inputFile = e.dataTransfer.items[0].getAsFile();
     }
 }
 
