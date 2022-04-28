@@ -157,6 +157,7 @@ body {
 }
 
 .btn-red {
+    padding: 0;
     border-color: #f0134d;
     color: #f0134d;
 }
