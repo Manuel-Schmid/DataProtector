@@ -13,25 +13,39 @@
 </nav>
 
 <div class="container">
-    <div class="inputs-container">
+    <div class="elements-container flex-container-center">
         <div class="inputs vertical-center">
-            <label id="input-file-label" for="input_file" class="btn btn-yellow custom-file-input">
-                File to encrypt
-            </label>
-            <input id="input_file" onclick="this.value=null;" type="file" accept="*"/>
+            <div id="drop-area">
+                <label id="input-file-label" for="input_file" class="btn btn-yellow custom-file-input">
+                    File to encrypt
+                </label>
+                <input id="input_file" onclick="this.value=null;" type="file" accept="*"/>
+            </div>
             <div class="password-container">
                 <input id="input_password" class="in-pw-container to-disable" type="password" placeholder="Your password..." disabled>
                 <button id="generate-password" class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
             </div>
         </div>
     </div>
-    <div class="button-container flex-container-center ">
+    <div class="elements-container flex-container-center">
+        <div class="algorithms-container vertical-center">
+            <p class="algorithms-title">Cipher</p>
+            <select id="algorithms" class="ddl btn btn-lightblue">
+                <option value="AES">AES</option>
+                <option value="TripleDES">TripleDES</option>
+                <option value="Rabbit">Rabbit</option>
+            </select>
+        </div>
+    </div>
+    <div class="elements-container flex-container-center ">
         <button id="crypt-btn" class="btn btn-green vertical-center to-disable" onclick="crypt()" disabled>Encrypt</button>
         <button id="output-btn" onclick="downloadFile()" class="btn btn-red vertical-center hidden">Download</button>
         <a id="output_file" class="hidden" href="" download>Download</a>
     </div>
 </div>
 </body>
-    <script src="assets/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/rabbit.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/tripledes.js"></script>
     <script src="assets/script.js"></script>
 </html>

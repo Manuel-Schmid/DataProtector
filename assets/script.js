@@ -3,10 +3,16 @@ let activeTab = 'encrypt';
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('input_file').addEventListener('change', file_upload, false);
     document.getElementById('input_password').addEventListener('keyup', passwordInputChange, false);
+    document.getElementById('algorithms').addEventListener('click', disableDownload, false);
     disableAll()
 });
 
 let inputFile = null;
+
+function disableDownload() {
+    document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable'
+    document.getElementById('output-btn').className = 'btn btn-red vertical-center hidden'
+}
 
 function disableAll() {
     document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable'
@@ -61,7 +67,7 @@ function crypt() {
 
         if (activeTab === 'encrypt') {
             reader.onload = function (e) {
-                let encrypted = CryptoJS.AES.encrypt(e.target.result, password);
+                let encrypted = getEncrypted(e.target.result, password)
                 document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
                 document.getElementById('output_file').setAttribute('download', inputFile.name + '.encrypted');
             };
@@ -69,7 +75,7 @@ function crypt() {
             showDownloadButton()
         } else if (activeTab === 'decrypt') {
             reader.onload = function (e) {
-                let decrypted = CryptoJS.AES.decrypt(e.target.result, password).toString(CryptoJS.enc.Latin1);
+                let decrypted = getDecrypted(e.target.result, password)
                 if(!/^data:/.test(decrypted)){
                     alert("Invalid password or file! Please try again.");
                     return false;
@@ -83,12 +89,49 @@ function crypt() {
     }
 }
 
+function getDecrypted(fileReaderResult, password) {
+    switch (document.getElementById('algorithms').value) {
+        case 'AES':
+            return CryptoJS.AES.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+        case 'TripleDES':
+            return CryptoJS.TripleDES.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+        case 'Rabbit':
+            return CryptoJS.Rabbit.decrypt(fileReaderResult, password).toString(CryptoJS.enc.Latin1);
+        default:
+            console.log('An error occurred.')
+    }
+}
+
+function getEncrypted(fileReaderResult, password) {
+    switch (document.getElementById('algorithms').value) {
+        case 'AES':
+            return CryptoJS.AES.encrypt(fileReaderResult, password);
+        case 'TripleDES':
+            return CryptoJS.TripleDES.encrypt(fileReaderResult, password);
+        case 'Rabbit':
+            return CryptoJS.Rabbit.encrypt(fileReaderResult, password);
+        default:
+            console.log('An error occurred.')
+    }
+}
+
+function dropHandler(e) {
+    e.preventDefault() // prevents opening file
+    if (e.dataTransfer.length !== 1 || e.dataTransfer.items[0].kind !== 'file') {
+        if (activeTab === 'encrypt') alert('Please select a valid file to encrypt!');
+        else if (activeTab === 'decrypt') alert('Please select a valid file to decrypt!');
+    } else {
+        inputFile = e.dataTransfer.items[0].getAsFile();
+    }
+}
+
 function showDownloadButton() {
     document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable hidden'
     document.getElementById('output-btn').className = 'btn btn-red vertical-center'
 }
 
 function switchTab(tab) {
+    document.getElementById('input_password').value = ''
     toggleNavItemDisabled()
     if (tab === 'encrypt') {
         document.getElementById('input-file-label').innerText = 'File to encrypt'
@@ -119,7 +162,5 @@ function downloadFile() {
     disableAll()
 }
 
-// function decrypt() {
-//     let input_file = document.getElementById('input_file').files[0];
-//     let pwd = document.getElementById('input_password').value;
-// }
+
+
