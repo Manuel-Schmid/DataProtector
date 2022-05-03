@@ -23,8 +23,8 @@
                 <input id="input_file"  onclick="this.value=null;" type="file"  accept="*" multiple/>
             </div>
             <div class="password-container">
-                <input id="input_password" class="in-pw-container to-disable" type="password" placeholder="Your password..." disabled>
-                <button id="generate-password" class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
+                <input id="input_password" class="in-pw-container to-disable" type="text" placeholder="Your password..." disabled>
+                <button id="generate-password" onclick="generatePassword()" class="generate-password-btn btn btn-white in-pw-container to-disable" disabled>🔑</button>
             </div>
         </div>
     </div>
@@ -50,6 +50,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/tripledes.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha512.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/sha256.js"></script>
+    <script src="https://github.com/fent/randexp.js/releases/download/v0.4.3/randexp.min.js"></script>
     <script src="assets/jszip.min.js"></script>
+    <script src="assets/pw_regex.js"></script>
     <script src="assets/script.js"></script>
 </html>

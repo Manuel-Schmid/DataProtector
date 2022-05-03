@@ -22,6 +22,7 @@ body {
     color: black;
     background-color: inherit;
     line-height: 7vh;
+    font-size: 16px;
     text-decoration: none;
     text-align: center;
     width: 9vw;
@@ -37,7 +38,7 @@ body {
 .active-tab {
     text-decoration: underline;
     background-color: #ffd866;
-    /*font-weight: bold;*/
+    font-weight: bold;
 }
 
 .container {

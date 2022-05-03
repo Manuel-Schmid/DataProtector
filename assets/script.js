@@ -1,5 +1,6 @@
 let activeTab = 'encrypt';
-let maxFileSize = 1 * 1024*1024; // 1 MB
+let maxFileSize = 1 * 1024*1024; // 1 MB (customizable file upload limit)
+let pwRegex = new RegExp(regex.regex0);
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('input_file').addEventListener('change', file_upload, false);
@@ -82,7 +83,17 @@ function isEmpty(str) {
 }
 
 function passwordInputChange() {
-    document.getElementById('crypt-btn').disabled = !!isEmpty(document.getElementById('input_password').value);
+    let pwInput = document.getElementById('input_password').value;
+    document.getElementById('crypt-btn').disabled = !checkValidPassword(pwInput);
+}
+
+function checkValidPassword(pw) {
+    return (!isEmpty(pw) && pwRegex.test(pw))
+}
+
+function generatePassword() {
+    document.getElementById('input_password').value = new RandExp(pwRegex).gen();
+    passwordInputChange()
 }
 
 function crypt() {
@@ -114,7 +125,7 @@ function crypt() {
                         let base64data = reader.result;
                         let encrypted = getEncrypted(base64data, password) // get encryption of compressed folder
                         document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
-                        document.getElementById('output_file').setAttribute('download', 'compressed.zip' + '.encrypted');
+                        document.getElementById('output_file').setAttribute('download', 'decrypted.zip' + '.encrypted');
                     }
                 })
             } else { // just one file
@@ -128,7 +139,6 @@ function crypt() {
             }
             showDownloadButton()
         }
-
 
         else if (activeTab === 'decrypt') {
             let reader = new FileReader();
