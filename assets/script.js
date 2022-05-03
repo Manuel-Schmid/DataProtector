@@ -112,8 +112,7 @@ function crypt() {
                     reader.readAsDataURL(zipBlob);
                     reader.onloadend = function() {
                         let base64data = reader.result;
-                        let encrypted = getEncrypted(base64data, password) // get encryption of compressed file
-
+                        let encrypted = getEncrypted(base64data, password) // get encryption of compressed folder
                         document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
                         document.getElementById('output_file').setAttribute('download', 'compressed.zip' + '.encrypted');
                     }
@@ -133,47 +132,90 @@ function crypt() {
 
         else if (activeTab === 'decrypt') {
             let reader = new FileReader();
-
             reader.onload = function (e) {
                 let decrypted = getDecrypted(e.target.result, password) // get decryption of decompressed file
-                if(!/^data:/.test(decrypted)){
-                    alert("Invalid password or file! Please try again.");
-                    return false;
-                }
+
+                if (!decrypted) return false // quit if an error occurs during decryption
+
                 document.getElementById('output_file').setAttribute('href', decrypted)
                 document.getElementById('output_file').setAttribute('download', inputFiles[0].name.replace('.encrypted',''))
                 showDownloadButton()
-            };
+            }
             reader.readAsText(inputFiles[0]);
         }
     }
 }
 
+function getEncrypted(compressedB64string, password) {
+    let passwordHashes = getPasswordHashes(password)
+
+    let encFile = getEncryptedFile(compressedB64string, passwordHashes.h1)
+
+    // get File hash
+    let fileHash = CryptoJS.SHA256(encFile + passwordHashes.h2);
+
+    return (encFile+fileHash);
+}
+
 function getDecrypted(compressedB64string, password) {
+    let passwordHashes = getPasswordHashes(password)
+
+    let str = compressedB64string;
+    let encFile = str.slice(0, str.length-64);
+
+    let expectedFileHash = ''+CryptoJS.SHA256(encFile + passwordHashes.h2);
+    let actualFileHash = str.slice(str.length-64, str.length);
+
+    let decrypted = getDecryptedFile(encFile, passwordHashes.h1);
+
+    if(!/^data:/.test(decrypted)){
+        alert("Invalid password, algorithm or file! Please try again.");
+        return false;
+    }
+
+    if (expectedFileHash !== actualFileHash) { // file has been manipulated
+        alert("Warning: File has been manipulated! Aborting decryption...");
+        return false;
+    }
+
+    return decrypted;
+}
+
+function getEncryptedFile(compressedB64string, h1) {
     switch (document.getElementById('algorithms').value) {
         case 'AES':
-            return CryptoJS.AES.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.AES.encrypt(compressedB64string, h1);
         case 'TripleDES':
-            return CryptoJS.TripleDES.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.TripleDES.encrypt(compressedB64string, h1);
         case 'Rabbit':
-            return CryptoJS.Rabbit.decrypt(compressedB64string, password).toString(CryptoJS.enc.Latin1);
+            return CryptoJS.Rabbit.encrypt(compressedB64string, h1);
         default:
-            console.log('An error occurred.')
+            alert('An error occurred.')
+            return null;
     }
 }
 
-function getEncrypted(compressedB64string, password) {
+function getDecryptedFile(compressedB64string, h1) {
     switch (document.getElementById('algorithms').value) {
         case 'AES':
-            return CryptoJS.AES.encrypt(compressedB64string, password);
+            return CryptoJS.AES.decrypt(compressedB64string, h1).toString(CryptoJS.enc.Latin1);
         case 'TripleDES':
-            return CryptoJS.TripleDES.encrypt(compressedB64string, password);
+            return CryptoJS.TripleDES.decrypt(compressedB64string, h1).toString(CryptoJS.enc.Latin1);
         case 'Rabbit':
-            return CryptoJS.Rabbit.encrypt(compressedB64string, password);
+            return CryptoJS.Rabbit.decrypt(compressedB64string, h1).toString(CryptoJS.enc.Latin1);
         default:
-            console.log('An error occurred.')
+            alert('An error occurred.')
+            return null;
     }
 }
+
+function getPasswordHashes(password) {
+    return {
+        h1: CryptoJS.SHA512(password + 1).toString(),
+        h2: CryptoJS.SHA512(password + 2).toString()
+    }
+}
+
 
 function showDownloadButton() {
     document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable hidden'
@@ -243,7 +285,7 @@ function unhighlight(e) {
     input_field.classList.remove('highlight')
 }
 
-dropArea.addEventListener('drop', handleDrop, false)
+dropArea.addEventListener('drop', handleDrop, false);
 function handleDrop(e) {
     let dt = e.dataTransfer
     let files = dt.files
@@ -284,4 +326,5 @@ function handleDrop(e) {
     inputFiles = [...files]
     enablePasswordInputs()
 }
+
 
