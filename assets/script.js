@@ -1,5 +1,5 @@
 let activeTab = 'encrypt';
-let maxFileSize = 1 * 1024*1024; // 1 MB (customizable file upload limit)
+let maxFileSize = 1*(1024*1024); // 1 MB (customizable file upload limit)
 let pwRegex = new RegExp(regex.regex0);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -160,8 +160,6 @@ function getEncrypted(compressedB64string, password) {
     let passwordHashes = getPasswordHashes(password)
 
     let encFile = getEncryptedFile(compressedB64string, passwordHashes.h1)
-
-    // get File hash
     let fileHash = CryptoJS.SHA256(encFile + passwordHashes.h2);
 
     return (encFile+fileHash);
@@ -215,7 +213,7 @@ function getDecryptedFile(compressedB64string, h1) {
             return CryptoJS.Rabbit.decrypt(compressedB64string, h1).toString(CryptoJS.enc.Latin1);
         default:
             alert('An error occurred.')
-            return null;
+            return
     }
 }
 
@@ -225,7 +223,6 @@ function getPasswordHashes(password) {
         h2: CryptoJS.SHA512(password + 2).toString()
     }
 }
-
 
 function showDownloadButton() {
     document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable hidden'
@@ -336,5 +333,3 @@ function handleDrop(e) {
     inputFiles = [...files]
     enablePasswordInputs()
 }
-
-

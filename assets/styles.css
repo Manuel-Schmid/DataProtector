@@ -214,7 +214,6 @@ body {
 
 .btn-white:hover:not([disabled]) {
     background-color: #4c420d;
-    /*border-color: #f8f9fa;*/
 }
 
 .hidden {

@@ -1,5 +1,5 @@
 const regex = {
-    // Just a test regex (minimum 3 & maximum 10 characters, no whitespaces):
+    // Just a test-regex for development (minimum 3 & maximum 10 characters, no whitespaces):
     regex0: /^.[^\s]{2,10}$/,
 
     // Minimum eight characters, at least one letter, one number and one special character:
