@@ -123,11 +123,6 @@ body {
     width: 33.33%;
 }
 
-.btn-red a {
-    text-decoration: none;
-    color: #f0134d;
-}
-
 .btn {
     background-color: transparent;
     text-decoration: none;
@@ -145,21 +140,16 @@ body {
     transition: color .15s ease-in-out , background-color .15s ease-in-out , border-color .15s ease-in-out , box-shadow .15s ease-in-out , -webkit-box-shadow .15s ease-in-out;
 }
 
-.btn:hover:not([disabled]), .btn-red a:hover:not([disabled]) {
+.btn:hover:not([disabled]) {
     cursor: pointer;
     color: #fff;
-}
-
-.btn-green{
-    border-color: #94aa2a;
-    color: #94aa2a;
 }
 
 .btn-green, .btn-red  {
     width: 7%;
 }
 
-.btn-green:disabled {
+.btn-red:disabled {
     background-image: linear-gradient(
             45deg,
             rgba(0,0,0,0.5) 25%,
@@ -177,15 +167,20 @@ body {
     border-color: #94aa2a;
 }
 
+.btn-red:hover:not([disabled]) {
+    border-color: #f0134d;
+    background: #f0134d;
+}
+
 .btn-red {
-    padding: 0;
     border-color: #f0134d;
     color: #f0134d;
 }
 
-.btn-red:hover:not([disabled]) {
-    border-color: #f0134d;
-    background: #f0134d;
+.btn-green{
+    padding: 0;
+    border-color: #94aa2a;
+    color: #94aa2a;
 }
 
 .btn-yellow {

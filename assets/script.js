@@ -12,13 +12,13 @@ document.addEventListener("DOMContentLoaded", function() {
 let inputFiles = null;
 
 function disableDownload() {
-    document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable'
-    document.getElementById('output-btn').className = 'btn btn-red vertical-center hidden'
+    document.getElementById('crypt-btn').className = 'btn btn-red vertical-center to-disable'
+    document.getElementById('output-btn').className = 'btn btn-green vertical-center hidden'
 }
 
 function disableAll() {
-    document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable'
-    document.getElementById('output-btn').className = 'btn btn-red vertical-center hidden'
+    document.getElementById('crypt-btn').className = 'btn btn-red vertical-center to-disable'
+    document.getElementById('output-btn').className = 'btn btn-green vertical-center hidden'
     document.getElementById('input_password').value = ''
     for (const el of document.getElementsByClassName('to-disable')) {
         el.disabled = true;
@@ -225,8 +225,8 @@ function getPasswordHashes(password) {
 }
 
 function showDownloadButton() {
-    document.getElementById('crypt-btn').className = 'btn btn-green vertical-center to-disable hidden'
-    document.getElementById('output-btn').className = 'btn btn-red vertical-center'
+    document.getElementById('crypt-btn').className = 'btn btn-red vertical-center to-disable hidden'
+    document.getElementById('output-btn').className = 'btn btn-green vertical-center'
 }
 
 function switchTab(tab) {
