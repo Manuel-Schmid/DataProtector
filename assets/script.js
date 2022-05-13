@@ -123,7 +123,7 @@ function crypt() {
                     reader.readAsDataURL(zipBlob);
                     reader.onloadend = function() {
                         let base64data = reader.result;
-                        let encrypted = getEncrypted(base64data, password) // get encryption of compressed folder
+                        let encrypted = getEncrypted(base64data, password) // get encryption of b64 compressed folder
                         document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
                         document.getElementById('output_file').setAttribute('download', 'decrypted.zip' + '.encrypted');
                     }
@@ -131,7 +131,7 @@ function crypt() {
             } else { // just one file
                 let reader = new FileReader();
                 reader.onload = function (e) {
-                    let encrypted = getEncrypted(e.target.result, password) // get encryption of compressed file
+                    let encrypted = getEncrypted(e.target.result, password) // get encryption of b64 compressed file
                     document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
                     document.getElementById('output_file').setAttribute('download', inputFiles[0].name + '.encrypted');
                 };
@@ -301,7 +301,7 @@ function handleDrop(e) {
         if (files.length < 1) {
             alert('Please select at least one file to encrypt!');
             return
-        } else {
+        } else { // one or more files
             let totalSize = 0
             for (const file of files) {
                 totalSize += file.size
