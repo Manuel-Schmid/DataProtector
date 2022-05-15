@@ -1,6 +1,6 @@
 let activeTab = 'encrypt';
-let maxFileSize = 1*(1024*1024); // 1 MB (customizable file upload limit)
-let pwRegex = new RegExp(regex.regex0);
+let maxFileSize = 2*(1024*1024); // 2 MB (customizable file upload limit)
+let pwRegex = new RegExp(regex.regex4);
 
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById('input_file').addEventListener('change', file_upload, false);
@@ -125,7 +125,7 @@ function crypt() {
                         let base64data = reader.result;
                         let encrypted = getEncrypted(base64data, password) // get encryption of b64 compressed folder
                         document.getElementById('output_file').setAttribute('href', 'data:application/octet-stream,' + encrypted)
-                        document.getElementById('output_file').setAttribute('download', 'decrypted.zip' + '.encrypted');
+                        document.getElementById('output_file').setAttribute('download', 'compressed.zip' + '.encrypted');
                     }
                 })
             } else { // just one file
